@@ -21,7 +21,7 @@ export default function useUserSession(initSession) {
 			await createSession(user.uid, role);
 			setUser(user.uid);
 			setRole(role);
-			console.log('Login successful:', {
+			console.log('Login successful', {
 				user,
 				role,
 			});
@@ -46,6 +46,7 @@ export default function useUserSession(initSession) {
 			if (authUser) {
 				setUser(authUser.uid);
 				setRole(authUser.isAdmin ? 'admin' : 'member');
+				console.log('useEffect from useUserSession');
 			} else {
 				setUser(null);
 				setRole('visitor');
@@ -53,5 +54,6 @@ export default function useUserSession(initSession) {
 		});
 		return () => unsubscribe();
 	}, []);
+	console.log(user, `Your role: ${role}`);
 	return { user, role, login, logout };
 }
