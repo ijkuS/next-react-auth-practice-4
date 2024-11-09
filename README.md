@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Implementing User Authentication and Authorization with Next.js and Firebase
 
-## Getting Started
+This is a practice to understand about the different setting for authentication, authorization, and protected routes in Next.js from React without React-router-dom library.
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+-    [Overview](#overview)
+
+     -    [Goal](#goal)
+     -    [Why I Chose Not to Use react-router-dom in This Project](#why-i-chose-not-to-use-react-router-dom-in-this-project)
+
+-    [Process](#process)
+
+     -    [Planning]
+          -    [Routing planning]()
+          -    [Technical planning](#technical-planning)
+
+-    [Challenges and Lessons](#challenges-and-lessons)
+-    [Future Improvements](#future-improvements)
+-    [Useful resources](#useful-resources)
+-    [Author](#author)
+-    [Acknowledgments](#acknowledgments)
+
+## Overview
+
+This is a practice to understand about the different setting for authentication, authorization, and protected routes in Next.js from React without React-router-dom library.
+
+### Goal
+
+-    Authentication with firebase authentication and realtime database
+-    Authorization for user types (Admins, Members, Visitors)
+-    Protected routes with middleware
+
+### Why I Chose Not to Use react-router-dom in This Project
+
+Using react-router-dom with Next.js is generally discouraged, as Next.js has a powerful built-in routing system optimized for server-side rendering (SSR) and static site generation (SSG). Here’s why that matters, especially for authentication and authorization:
+
+**Conflict with Next.js Routing:**
+Next.js follows a file-based routing system, automatically generating routes based on the pages directory structure. Meanwhile, react-router-dom operates as a client-side router. Attempting to use both can lead to conflicts, redundant routes, and unexpected behavior as both systems vie to manage the routing layer.
+
+**Server-Side Rendering Compatibility:**
+Next.js excels in SSR, rendering routes and data on the server before reaching the client. This is especially beneficial for authentication flows, where server-rendered redirects or secure data fetching are essential. Since react-router-dom is purely client-side, it lacks support for SSR, potentially undermining Next.js’s capabilities in areas where secure, pre-rendered data is a priority.
+
+**Middleware and API Integrations for Secure Access Control:**
+Next.js supports built-in middleware and API routes, which help implement server-side authentication and authorization checks. This server-based approach ensures that only authenticated users can access protected routes, enhancing data security and access control. In contrast, react-router-dom is client-only, meaning it relies on client-side logic, exposing protected routes temporarily until access is verified on the client.
+
+**Streamlined Redirects and Middleware Control:**
+For authentication, Next.js’s middleware can check and apply redirects on the server before users reach restricted routes, effectively managing access and protecting sensitive content. react-router-dom lacks this server-driven redirection capability, limiting it to client-side control.
+
+Overall, Next.js’s built-in routing, middleware, and server-side features provide a more secure and efficient approach to authentication and authorization. This is why I chose to leverage Next.js’s native capabilities for routing and access control in this project.
+
+## Process
+
+**File tree**
+
+```
+src
+ ┣ actions
+ ┃ ┗ auth-actions.js // *added
+ ┣ app
+ ┃ ┣ libs
+ ┃ ┃ ┗ firebase
+ ┃ ┃ ┃ ┣ auth.js // *added
+ ┃ ┃ ┃ ┗ config.js // *added
+ ┃ ┣ favicon.ico
+ ┃ ┣ globals.css
+ ┃ ┣ layout.js // *modified
+ ┃ ┗ page.module.css
+ ┣ components
+ ┃ ┗ Header.jsx // *added
+ ┣ hooks
+ ┃ ┗ use-user-session.jsx // *added
+ ┣ pages
+ ┃ ┣ admin
+ ┃ ┃ ┣ addnew.jsx
+ ┃ ┃ ┗ dashboard.jsx
+ ┃ ┣ api
+ ┃ ┃ ┣ remove-session.js // *added
+ ┃ ┃ ┗ set-session.js // *added
+ ┃ ┣ products
+ ┃ ┃ ┗ all.jsx
+ ┃ ┣ _app.jsx // *modified
+ ┃ ┣ cart.jsx
+ ┃ ┗ index.jsx
+ ┣ routes
+ ┃ ┗ middleware-constants.js // *added
+ ┗ middleware.js // *added
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Author
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+-    [Noej Ijkus](https://github.com/ijkuS)
+-    [email](ijkus.noej@gmail.com)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Acknowledgments
