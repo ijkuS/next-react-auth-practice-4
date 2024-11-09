@@ -1,21 +1,25 @@
-import { createSession, removeSession } from '@/actions/auth-actions';
-import { login, logout } from '@/app/libs/firebase/auth';
 import useUserSession from '@/hooks/use-user-session';
 import Link from 'next/link';
 import React from 'react';
 
 export default function Header({ session }) {
-	const { user, role } = useUserSession(session);
-	// let userRole = 'visitor';
+	const { user, role, login, logout } = useUserSession(session);
 
-	const handleLogin = async () => {
-		const userId = await login();
-		await createSession(userId, role);
-	};
-	const handleLogout = async () => {
-		await logout();
-		await removeSession();
-	};
+	// const handleLogin = async () => {
+	// 	try {
+	// 		const user = await login();
+	// 		const userId = user.uid;
+	// 		await createSession(userId, role);
+	// 		console.log('Login successful:', { user, role }); // Log userId and role after successful session creation
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+	// const handleLogout = async () => {
+	// 	await logout();
+	// 	await removeSession();
+	// 	console.log('Logged out!!!');
+	// };
 
 	return (
 		<header>
@@ -24,12 +28,16 @@ export default function Header({ session }) {
 			</Link>
 			<menu>
 				<Link href='/products/all'>Products</Link>
-				<Link href='/cart'>Cart</Link>
-				<Link href='/admin/dashboard'>Admin</Link>
+				{role === 'member' && <Link href='/cart'>Cart</Link>}
+				{role === 'admin' && (
+					<Link href='/admin/dashboard'>Admin</Link>
+				)}
 			</menu>
-
-			<button onClick={handleLogout}>Logout</button>
-			<button onClick={handleLogin}>Login</button>
+			{user ? (
+				<button onClick={logout}>Logout</button>
+			) : (
+				<button onClick={login}>Login</button>
+			)}
 		</header>
 	);
 }

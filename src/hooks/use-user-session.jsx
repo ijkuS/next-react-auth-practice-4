@@ -1,24 +1,57 @@
-import { onUserStateChange } from '@/app/libs/firebase/auth';
+'use client';
+import { createSession, removeSession } from '@/actions/auth-actions';
+import {
+	onUserStateChange,
+	login as firebaseLogin,
+	logout as firebaseLogout,
+	adminUser,
+} from '@/app/libs/firebase/auth';
 import React, { useEffect, useState } from 'react';
 
 export default function useUserSession(initSession) {
-	const [user, setUser] = useState(initSession);
-	let role = 'visitor';
+	const [user, setUser] = useState(initSession || null);
+	const [role, setRole] = useState('visitor');
+
+	// Handle login, update session and role
+	const login = async () => {
+		try {
+			const user = await firebaseLogin();
+			const role = user.isAdmin ? 'admin' : 'member'; // Determine role based on isAdmin property
+
+			await createSession(user.uid, role);
+			setUser(user.uid);
+			setRole(role);
+			console.log('Login successful:', {
+				user,
+				role,
+			});
+		} catch (error) {
+			console.error('Error during login:', error);
+		}
+	};
+	const logout = async () => {
+		try {
+			await firebaseLogout();
+			await removeSession();
+			setUser(null);
+			setRole('visitor');
+			console.log('Logged out successfully');
+		} catch (error) {
+			console.error('Error during logout:', error);
+		}
+	};
 
 	useEffect(() => {
 		const unsubscribe = onUserStateChange(async (authUser) => {
-			setUser(authUser ? authUser.uid : null);
-
 			if (authUser) {
-				if (authUser.isAdmin) {
-					role = 'admin';
-				} else {
-					role = 'member';
-					console.log(authUser, 'this is from authUser');
-				}
+				setUser(authUser.uid);
+				setRole(authUser.isAdmin ? 'admin' : 'member');
+			} else {
+				setUser(null);
+				setRole('visitor');
 			}
 		});
 		return () => unsubscribe();
 	}, []);
-	return { user, role };
+	return { user, role, login, logout };
 }
