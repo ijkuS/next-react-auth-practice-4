@@ -1,10 +1,10 @@
 'use client';
+
 import { createSession, removeSession } from '@/actions/auth-actions';
 import {
 	onUserStateChange,
 	login as firebaseLogin,
 	logout as firebaseLogout,
-	adminUser,
 } from '@/app/libs/firebase/auth';
 import React, { useEffect, useState } from 'react';
 

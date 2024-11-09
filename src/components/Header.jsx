@@ -5,22 +5,6 @@ import React from 'react';
 export default function Header({ session }) {
 	const { user, role, login, logout } = useUserSession(session);
 
-	// const handleLogin = async () => {
-	// 	try {
-	// 		const user = await login();
-	// 		const userId = user.uid;
-	// 		await createSession(userId, role);
-	// 		console.log('Login successful:', { user, role }); // Log userId and role after successful session creation
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
-	// const handleLogout = async () => {
-	// 	await logout();
-	// 	await removeSession();
-	// 	console.log('Logged out!!!');
-	// };
-
 	return (
 		<header>
 			<Link href='/'>

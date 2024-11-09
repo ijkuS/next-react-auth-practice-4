@@ -14,7 +14,6 @@ export async function login() {
 		if (!result || !result.user) {
 			throw new Error('Google sign in failed');
 		}
-		// return result.user.uid;
 		return result.user;
 	} catch (error) {
 		console.error('Error signing in with Google', error);
