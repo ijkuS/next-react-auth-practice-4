@@ -30,9 +30,8 @@ export function onUserStateChange(callback) {
 	const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
 		const updatedUser = user ? await adminUser(user) : null;
 		callback(updatedUser);
-		console.log(updatedUser, 'this is updatedUser');
+		console.log(updatedUser, 'this is updatedUser from Auth');
 	});
-	console.log(unsubscribe, 'this is unsubscribe');
 	return unsubscribe;
 }
 export async function adminUser(user) {
@@ -44,6 +43,10 @@ export async function adminUser(user) {
 			const isAdmin = admins.includes(user.uid);
 			return { ...user, isAdmin };
 		}
+		if (user.uid === process.env.NEXT_PUBLIC_FIREBASE_ADMIN_UID) {
+			return { ...user, isAdmin };
+		}
+
 		return user;
 	} catch (error) {
 		console.log(error);

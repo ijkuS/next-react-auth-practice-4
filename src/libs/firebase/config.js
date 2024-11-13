@@ -16,6 +16,10 @@ const firebaseConfig = {
 	databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
 };
 
+export const firebaseAdminConfig = {
+	adminUid: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_UID,
+};
+
 const firebaseApp =
 	getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const firebaseAuth = getAuth(firebaseApp);

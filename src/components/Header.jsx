@@ -2,8 +2,9 @@ import useUserSession from '@/hooks/use-user-session';
 import Link from 'next/link';
 import React from 'react';
 
-export default function Header({ session }) {
-	const { user, role, login, logout } = useUserSession(session);
+export default function Header() {
+	const { user, role, login, logout } = useUserSession();
+	// const user = useUser();
 
 	return (
 		<header>
